@@ -1,0 +1,77 @@
+<!-- templates/edit_note.html -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <title>Edit Note</title>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">FlaskApp</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="/">Home</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="/edit_note/{{ note[0] }}">Edit Note <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/add_note">Add Note</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/search">Search</a>
+        </li>
+        {% if current_user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link" href="/logout">Logout</a>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+  </nav>
+  <div class="container mt-5">
+    <h1 class="mb-4">Edit Note</h1>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="alert-container mt-3">
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+              {{ message }}
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    <form method="POST" action="/edit_note/{{ note[0] }}" enctype="multipart/form-data">
+      <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" class="form-control" id="title" name="title" value="{{ note[1] }}" required>
+      </div>
+      <div class="form-group">
+        <label for="note">Note</label>
+        <textarea class="form-control" id="note" name="note" rows="3" required>{{ note[2] }}</textarea>
+      </div>
+      <div class="form-group">
+        <label for="file">Upload New File</label>
+        <input type="file" class="form-control-file" id="file" name="file">
+        {% if note[3] %}
+        <p>Current File: <a href="{{ url_for('uploaded_file', filename=note[3]) }}">{{ note[3] }}</a></p>
+        {% endif %}
+      </div>
+      <button type="submit" class="btn btn-primary">Update Note</button>
+    </form>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

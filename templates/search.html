@@ -1,0 +1,75 @@
+<!-- templates/search.html -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <title>Search Results</title>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">FlaskApp</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="/">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/add_note">Add Note</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="/search">Search <span class="sr-only">(current)</span></a>
+        </li>
+        {% if current_user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link" href="/logout">Logout</a>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+  </nav>
+  <div class="container mt-5">
+    <h1 class="mb-4">Search Results</h1>
+    <form method="POST" action="/search">
+      <div class="form-group">
+        <label for="query">Search Query</label>
+        <input type="text" class="form-control" id="query" name="query" value="{{ query }}" required>
+      </div>
+      <div class="form-group">
+        <label for="table">Select Table</label>
+        <select class="form-control" id="table" name="table" required>
+          <option value="saturn" {% if table == 'saturn' %}selected{% endif %}>Saturn</option>
+          <option value="logic" {% if table == 'logic' %}selected{% endif %}>Logic</option>
+          <option value="paper" {% if table == 'paper' %}selected{% endif %}>Paper</option>
+          <option value="algo" {% if table == 'algo' %}selected{% endif %}>Algo</option>
+          <option value="physics" {% if table == 'physics' %}selected{% endif %}>Physics</option>
+          <option value="workout" {% if table == 'workout' %}selected{% endif %}>Workout</option>
+          <option value="chemistry" {% if table == 'chemistry' %}selected{% endif %}>Chemistry</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Search</button>
+      <button type="submit" name="export" value="export" class="btn btn-info">Export Results</button>
+    </form>
+    {% if results is not none %}
+    <div class="mt-4">
+      <h2>Results</h2>
+      <ul class="list-group">
+        {% for result in results %}
+        <li class="list-group-item">
+          <strong>Prompt:</strong> {{ result[2] }}<br>
+          <strong>Response:</strong> {{ result[3] }}
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+  </div>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
